@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import api from "../services/api";
 
-function LoginForm({ onLogin }) {
+function LoginForm({ onLogin, onForgotPassword }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -96,6 +96,16 @@ function LoginForm({ onLogin }) {
           </span>
           <span className="absolute inset-0 bg-white/20 opacity-0 transition duration-500 hover:opacity-20" />
         </button>
+
+        <div className="pt-2 text-right">
+          <button
+            type="button"
+            onClick={onForgotPassword}
+            className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+          >
+            Forgot Password?
+          </button>
+        </div>
       </form>
     </div>
   );

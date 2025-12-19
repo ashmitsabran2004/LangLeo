@@ -4,10 +4,11 @@ import LoginForm from "./components/LoginForm";
 import ChatWindow from "./components/ChatWindow";
 import Landing from "./assets/Landing";
 import SignupForm from "./components/SignupForm";
+import ForgotPassword from "./components/ForgotPassword";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [mode, setMode] = useState("landing"); // 'landing' | 'login' | 'signup' | 'chat'
+  const [mode, setMode] = useState("landing"); // 'landing' | 'login' | 'signup' | 'chat' | 'forgot-password'
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [morphReady, setMorphReady] = useState(false);
   const overlayRef = useRef(null);
@@ -141,7 +142,10 @@ function App() {
             >
               ← Back to home
             </button>
-            <LoginForm onLogin={handleLogin} />
+            <LoginForm
+              onLogin={handleLogin}
+              onForgotPassword={() => setMode("forgot-password")}
+            />
             <p className="mt-4 text-center text-xs text-slate-500">
               Don&apos;t have an account?{" "}
               <button
@@ -151,6 +155,21 @@ function App() {
                 Sign up
               </button>
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* Forgot Password Page */}
+      {mode === "forgot-password" && !user && (
+        <div className="page-shell relative z-10 flex min-h-screen items-center justify-center px-4 py-12">
+          <div className="w-full max-w-xl">
+            <button
+              onClick={() => setMode("login")}
+              className="mb-4 text-xs text-slate-400 transition hover:text-emerald-200"
+            >
+              ← Back to login
+            </button>
+            <ForgotPassword onBackToLogin={() => setMode("login")} />
           </div>
         </div>
       )}

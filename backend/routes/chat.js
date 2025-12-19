@@ -6,7 +6,7 @@ const { translateWithMistral, translateWithLibre, chatWithMistral } = require(".
 
 const router = express.Router();
 
-// Graceful translation helper: prefer Mistral; fall back to Libre; finally original text.
+// Graceful translation helper
 async function safeTranslate(text, from, to) {
   if (!text || from === to) return text;
   try {
@@ -47,7 +47,7 @@ router.post("/message", auth, async (req, res) => {
     } catch (err) {
       console.warn("Mistral chat failed:", err.response?.data || err.message);
 
-      // Check if it's a quota/rate limit error
+      // Check if it's a quota limit error
       const isQuotaError = err.response?.status === 429;
       const errorCode = err.response?.data?.error?.code;
 
