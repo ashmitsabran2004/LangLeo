@@ -80,4 +80,9 @@ process.on('SIGINT', async () => {
 });
 
 // Start the connection
-connectDB();
+// connectDB(); // Removed duplicate call
+
+// Health check route
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Backend is running' });
+});
