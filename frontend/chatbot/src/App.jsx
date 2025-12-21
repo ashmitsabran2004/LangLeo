@@ -184,7 +184,7 @@ function App() {
             >
               ← Back to home
             </button>
-            <SignupForm onSignupSuccess={() => setMode("login")} />
+            <SignupForm onSignupSuccess={() => setMode("login")} onLogin={handleLogin} />
             <p className="mt-4 text-center text-xs text-slate-500">
               Already have an account?{" "}
               <button

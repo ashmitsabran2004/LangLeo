@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const User = require('../models/User');
+const axios = require('axios');
 
 // Configure nodemailer
 const transporter = nodemailer.createTransport({
@@ -21,6 +22,7 @@ const router = express.Router();
 router.post('/signup', async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    if (!password) return res.status(400).json({ message: 'Password is required' });
 
     // check if user already exists
     const existingUser = await User.findOne({ email });
@@ -71,6 +73,73 @@ router.post('/login', async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// GOOGLE LOGIN
+router.post('/google', async (req, res) => {
+  try {
+    const { accessToken } = req.body;
+
+    // Fetch user info from Google
+    const googleRes = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+
+    const { name, email, sub } = googleRes.data;
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create new user
+      const randomPassword = crypto.randomBytes(16).toString('hex');
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+      user = new User({
+        username: name,
+        email,
+        password: hashedPassword,
+        googleId: sub
+      });
+
+      try {
+        await user.save();
+      } catch (err) {
+        if (err.code === 11000) {
+           // Handle username duplicate
+           user.username = `${name.replace(/\s+/g, '')}${Math.floor(Math.random() * 10000)}`;
+           await user.save();
+        } else {
+          throw err;
+        }
+      }
+    } else {
+        // Link googleId if not present
+        if (!user.googleId) {
+            user.googleId = sub;
+            await user.save();
+        }
+    }
+
+    // Generate JWT
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
+
+  } catch (err) {
+    console.error('Google login error:', err);
+    res.status(400).json({ message: 'Google login failed' });
   }
 });
 
