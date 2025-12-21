@@ -11,8 +11,6 @@ const app = express();
 app.use(cors({
   origin: 'https://lang-leo-frontend.vercel.app',
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.options('*', cors()); // Enable pre-flight for all routes
 app.use(express.json());
