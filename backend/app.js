@@ -12,7 +12,7 @@ app.use(cors({
   origin: 'https://lang-leo-frontend.vercel.app',
   credentials: true,
 }));
-app.options('*', cors()); // Enable pre-flight for all routes
+app.options('(.*)', cors()); // Enable pre-flight for all routes
 app.use(express.json());
 
 // mount auth routes under /api/auth
