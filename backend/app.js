@@ -9,7 +9,7 @@ const chatRoutes = require('./routes/chat');
 const app = express();
 
 app.use(cors({
-  origin: ['https://lang-leo-frontend.vercel.app', 'http://localhost:5173', 'http://localhost:3000'],
+  origin: ['https://lang-leo-frontend.vercel.app', 'http://localhost:5173', 'http://localhost:3000', 'https://langleo.netlify.app'],
   credentials: true,
 }));
 app.use(express.json());
