@@ -9,7 +9,7 @@ const chatRoutes = require('./routes/chat');
 const app = express();
 
 app.use(cors({
-  origin: true, // Allow any origin that sends the request
+  origin: 'https://lang-leo-frontend.vercel.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
