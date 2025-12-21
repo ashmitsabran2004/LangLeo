@@ -8,7 +8,12 @@ const chatRoutes = require('./routes/chat');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://lang-leo-frontend.vercel.app', 'http://localhost:5173', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // mount auth routes under /api/auth
